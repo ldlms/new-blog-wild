@@ -1,18 +1,32 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Article } from '../models/article.model';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
 
-  constructor() { }
+  private articleJsonUrl = "http://localhost:3000/articles"
 
-  getArticle(){
+  constructor(private http: HttpClient) { }
+
+  getArticle(): Observable<Article[]> {
+    return this.http.get< Article[]>(this.articleJsonUrl).pipe(
+      map(response => {
+        return response;
+      })
+    );
+
 
   }
 
-  getArticleById(){
-    
+  getArticleById(id: number): Observable<Article | undefined> {
+    return this.http.get<Article[]>(this.articleJsonUrl).pipe(
+      map(article => article.find(article => (article.id == id))
+      )
+    )
   }
 
 

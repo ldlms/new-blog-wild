@@ -1,1 +1,8 @@
-<p>Article id {{ articleId }}</p>
+<div *ngIf="article | async as article" class="main-container">
+    <h3>{{article.title}}</h3>
+    <p>{{article.content}}</p>
+    <p>{{article.createdAt | date : "dd/MM/yyyy"}}</p>
+    <img [src]="article.image">
+    <p>Nombres de Likes : {{article.likeCount}}</p>
+    <p>categorie : {{article.categoryName}}</p>
+</div>
