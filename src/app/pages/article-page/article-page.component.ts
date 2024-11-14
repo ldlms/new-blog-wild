@@ -2,8 +2,9 @@ import { Component, inject } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Article } from '../../models/article.model';
 import { ApiService } from '../../shared/api.service';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-article-page',
@@ -17,14 +18,17 @@ export class ArticlePageComponent {
   private route: ActivatedRoute = inject(ActivatedRoute);
   article: Observable<Article|undefined> = new Observable();
 
-  constructor(private apiService:ApiService){}
+  constructor(private http:HttpClient){}
+
+  private articleJsonUrl = "http://localhost:3000/articles"
 
 
   ngOnInit() {
     this.route.paramMap.subscribe((params: ParamMap) => {
-      this.article = this.apiService.getArticleById(Number(params.get('id')));
-      console.log(Number(params.get('id')));
-      console.log(this.article);
+      this.article = this.http.get<Article[]>(this.articleJsonUrl).pipe(
+        map(article => article.find(article => (article.id == Number(params.get('id'))))
+        )
+      )
     });
   }
 }

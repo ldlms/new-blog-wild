@@ -3,7 +3,8 @@ import { Article } from '../../models/article.model';
 import { CommonModule } from '@angular/common';
 import { ArticleThumbnailComponent } from '../article-thumbnail/article-thumbnail.component';
 import { ApiService } from '../../shared/api.service';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-article-list',
@@ -14,10 +15,16 @@ import { Observable } from 'rxjs';
 })
 export class ArticleListComponent implements OnInit {
 
-  constructor(private apiService:ApiService){}
+  constructor(private http:HttpClient){}
+
+  private articleJsonUrl = "http://localhost:3000/articles"
 
   ngOnInit(): void {
-    this.articles = this.apiService.getArticle();
+    this.articles =  this.http.get< Article[]>(this.articleJsonUrl).pipe(
+        map(article => {
+          return article;
+        })
+      );
   }
   
   articles:Observable<Article[]> = new Observable();

@@ -12,10 +12,10 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
-  getArticle(): Observable<Article[]> {
+  getArticles(): Observable<Article[]> {
     return this.http.get< Article[]>(this.articleJsonUrl).pipe(
-      map(response => {
-        return response;
+      map(article => {
+        return article;
       })
     );
 
